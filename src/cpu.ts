@@ -34,6 +34,15 @@ export class CPU {
     );
   }
 
+  debug() {
+    this.registerNames.forEach((name) => {
+      console.log(
+        `${name}: 0x${this.getRegister(name).toString(16).padStart(4, "0")}`
+      );
+    });
+    console.log();
+  }
+
   getRegister(name: string) {
     if (!(name in this.registerMap)) {
       throw new Error(`getRegister: No such register '${name}'`);
@@ -58,7 +67,7 @@ export class CPU {
   fetch16() {
     const nextInstructionAddress = this.getRegister("ip");
     const instruction = this.memory.getUint16(nextInstructionAddress);
-    this.setRegister("ip", nextInstructionAddress + 1);
+    this.setRegister("ip", nextInstructionAddress + 2);
     return instruction;
   }
 
