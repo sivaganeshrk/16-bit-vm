@@ -81,7 +81,13 @@ export class CPU {
         return;
       }
       // Move register to register
-
+      case instructions.MOV_REG_REG: {
+        const registerFrom = (this.fetch() % this.registerNames.length) * 2;
+        const registerTo = (this.fetch() % this.registerNames.length) * 2;
+        const value = this.registers.getUint16(registerFrom);
+        this.registers.setUint16(registerTo, value);
+        return;
+      }
       // Add register to register
       case instructions.ADD_REG_REG: {
         const r1 = this.fetch();
