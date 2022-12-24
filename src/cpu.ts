@@ -73,18 +73,15 @@ export class CPU {
 
   execute(instruction: number) {
     switch (instruction) {
-      // Move literal into the r1 register
-      case instructions.MOV_LIT_R1: {
+      // Move literal into register
+      case instructions.MOV_LIT_REG: {
         const literal = this.fetch16();
-        this.setRegister("r1", literal);
+        const register = (this.fetch() % this.registerNames.length) * 2;
+        this.registers.setUint16(register, literal);
         return;
       }
-      // Move literal into the r2 register
-      case instructions.MOV_LIT_R2: {
-        const literal = this.fetch16();
-        this.setRegister("r2", literal);
-        return;
-      }
+      // Move register to register
+
       // Add register to register
       case instructions.ADD_REG_REG: {
         const r1 = this.fetch();
