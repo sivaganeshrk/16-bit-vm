@@ -99,6 +99,15 @@ export class CPU {
         return;
       }
 
+      // Move memory to register
+      case instructions.MOV_MEM_REG: {
+        const address = this.fetch16();
+        const registerTo = (this.fetch() % this.registerNames.length) * 2;
+        const value = this.memory.getUint16(address);
+        this.registers.setUint16(registerTo, value);
+        return;
+      }
+
       // Add register to register
       case instructions.ADD_REG_REG: {
         const r1 = this.fetch();
