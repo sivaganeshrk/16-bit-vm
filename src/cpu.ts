@@ -80,6 +80,7 @@ export class CPU {
         this.registers.setUint16(register, literal);
         return;
       }
+
       // Move register to register
       case instructions.MOV_REG_REG: {
         const registerFrom = (this.fetch() % this.registerNames.length) * 2;
@@ -88,6 +89,16 @@ export class CPU {
         this.registers.setUint16(registerTo, value);
         return;
       }
+
+      // Move register to memory
+      case instructions.MOV_REG_MEM: {
+        const registerFrom = (this.fetch() % this.registerNames.length) * 2;
+        const address = this.fetch16();
+        const value = this.registers.getUint16(registerFrom);
+        this.memory.setUint16(address, value);
+        return;
+      }
+
       // Add register to register
       case instructions.ADD_REG_REG: {
         const r1 = this.fetch();
