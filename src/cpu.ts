@@ -43,6 +43,17 @@ export class CPU {
     console.log();
   }
 
+  viewMemoryAt(address: number) {
+    // address: value | 0x0f01: 0x04 0x05 0xA3 0xFE 0x13 0x0D 0x44 0x0F
+    // @ts-ignore
+    const nextEightBytes = Array.from({ length: 8 }, (_, i) =>
+      this.memory.getUint8(address + i)
+    ).map((v: number) => `0x${v.toString(16).padStart(2, "0")}`);
+
+    console.log(
+      `0x${address.toString(16).padStart(4, "0")}: ${nextEightBytes.join(" ")}`
+    );
+  }
   getRegister(name: string) {
     if (!(name in this.registerMap)) {
       throw new Error(`getRegister: No such register '${name}'`);
