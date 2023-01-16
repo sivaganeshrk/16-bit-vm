@@ -21,6 +21,8 @@ export class CPU {
       "r6",
       "r7",
       "r8",
+      "sp",
+      "fp",
     ];
 
     this.registers = createMemory(this.registerNames.length * 2);
@@ -32,6 +34,9 @@ export class CPU {
       },
       {}
     );
+
+    this.setRegister("sp", memory.byteLength - 1 - 1);
+    this.setRegister("fp", memory.byteLength - 1 - 1);
   }
 
   debug() {
@@ -80,6 +85,12 @@ export class CPU {
     const instruction = this.memory.getUint16(nextInstructionAddress);
     this.setRegister("ip", nextInstructionAddress + 2);
     return instruction;
+  }
+
+  push(value: number) {
+    const spAddress = this.getRegister("sp");
+    this.memory.setUint16(spAddress, value);
+    this.setRegister("sp", spAddress - 2);
   }
 
   execute(instruction: number) {
@@ -138,6 +149,13 @@ export class CPU {
           this.setRegister("ip", address);
         }
 
+        return;
+      }
+
+      // Push Literal
+      case instructions.PSH_LIT: {
+        const value = this.fetch16();
+        this.push(value);
         return;
       }
     }
